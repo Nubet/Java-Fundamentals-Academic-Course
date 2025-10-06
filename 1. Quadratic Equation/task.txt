@@ -1,0 +1,9 @@
+1) Quadratic Equation
+
+Write a program that solves the quadratic equation ax2 + bx + c = 0. The coefficients a, b, and c are passed as command-line arguments. Consider the case where the user provides an incorrect number of parameters.
+
+Guidelines:
+
+    Assume that a, b, and c are integers.
+    Consult the Integer class API and find suitable functions.
+    Learn the differences between Integer and int.
