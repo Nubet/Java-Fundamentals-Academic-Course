@@ -1,4 +1,5 @@
 import java.util.List;
+import java.text.DecimalFormat;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,17 +13,17 @@ public class Main {
             int a = Integer.parseInt(args[0]);
             int b = Integer.parseInt(args[1]);
             int c = Integer.parseInt(args[2]);
-
-
+			DecimalFormat df = new DecimalFormat("#.##");
+	
             try {
                 List<Double> solutions = QuadraticEquationUtils.solve(a, b, c);
 
                 if (null == solutions)
                     System.out.println("The equation has no real solutions.");
                 else if (solutions.size() == 1)
-                    System.out.println("The equation has one solution: x = " + solutions.get(0));
+                    System.out.println("The equation has one solution: x = " + df.format(solutions.get(0)));
                 else
-                    System.out.println("The equation has two solutions: x1 = " + solutions.get(0) + ", x2 = " + solutions.get(1));
+                    System.out.println("The equation has two solutions: x1 = " + df.format(solutions.get(0)) + ", x2 = " + df.format(solutions.get(1)));
 
             } catch (IllegalArgumentException e) {
                 System.out.println("Error occured: " + e.getMessage());
