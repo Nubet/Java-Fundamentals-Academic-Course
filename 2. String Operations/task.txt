@@ -1,0 +1,13 @@
+2) String Operations
+
+Write a program that takes two numbers (a and b) and a string as command-line arguments. The program should extract a substring from the given string starting at index a (inclusive) and ending at index b (exclusive).
+
+Example:
+java Substring Welcome 2 4
+This should output: elc
+The program should then display the original string without the extracted substring. For the given example, it should output: Wome
+
+Guidelines:
+
+    Consider and list all possible incorrect ways of providing arguments.
+    Any sequence of parameters other than two natural numbers and a string, where the first number is less than the second and both are less than the length of the string, should generate a precise error message explaining why the parameter set is incorrect. 
