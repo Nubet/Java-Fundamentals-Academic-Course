@@ -1,0 +1,30 @@
+5) Shopping List
+
+Write a program for creating a shopping list in text mode. The program reads a text file containing product categories and their items:
+
+Example File:
+
+    Groceries:
+        Bread
+        Butter
+        Milk
+        Cheese
+    Cleaning Supplies:
+        Soap
+        Dishwashing liquid
+    Automotive:
+        Air freshener
+        Windshield washer fluid
+
+The product list file is prepared by the user and not modified by the program. Consider using CSV format.
+
+Program Features:
+
+    Load the product list from the file.
+    Allow adding products by selecting a category and item.
+    Display all products on the shopping list.
+    Remove specific products by category and item.
+    Save the shopping list to disk.
+
+User Experience: Provide clear instructions and menus for easy use.
+Guidelines: Explore the differences between java.io and java.nio packages for file operations. 
