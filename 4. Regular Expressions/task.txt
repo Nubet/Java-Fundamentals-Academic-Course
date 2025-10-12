@@ -1,0 +1,3 @@
+4) Regular Expressions
+
+Write a program that verifies whether the parentheses in a given arithmetic expression are correctly matched. The expression is provided as a single string of characters, using standard arithmetic operators. The program should display a message indicating whether the parentheses are matched or not.
