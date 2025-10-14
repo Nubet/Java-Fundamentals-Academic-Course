@@ -8,7 +8,7 @@ public final class MenuController
     private final ShoppingList shoppingListManager;
     private final Scanner scanner;
 
-    public MenuController(ShoppingList shoppingListManager, Scanner scanner) {
+    private MenuController(ShoppingList shoppingListManager, Scanner scanner) {
         this.shoppingListManager = shoppingListManager;
         this.scanner = scanner;
     }
@@ -35,11 +35,11 @@ public final class MenuController
                     waitForUserInput();
                     break;
                 case 3:
-                    handleAddProduct();
+                    addProductToShoppingListBySelection();
                     waitForUserInput();
                     break;
                 case 4:
-                    handleRemoveProduct();
+                    removeProductFromShoppingListBySelection();
                     waitForUserInput();
                     break;
                 case 5:
@@ -51,7 +51,7 @@ public final class MenuController
                     waitForUserInput();
                     break;
                 case 7:
-                    exitApplication();
+                    printExitMessage();
                     return;
                 default:
                     break;
@@ -104,7 +104,7 @@ public final class MenuController
         System.out.println("Total: " + list.size());
     }
 
-    private void handleAddProduct() {
+    private void addProductToShoppingListBySelection() {
         List<String> categories = shoppingListManager.getCategories();
         if (categories.isEmpty()) {
             System.out.println("No categories available.");
@@ -138,7 +138,7 @@ public final class MenuController
     }
 
 
-    private void handleRemoveProduct() {
+    private void removeProductFromShoppingListBySelection() {
         List<Product> shoppingList = shoppingListManager.getCurrentShoppingList();
         if (shoppingList.isEmpty()) {
             System.out.println("Shopping list is empty.");
@@ -174,7 +174,7 @@ public final class MenuController
         }
     }
 
-    private void exitApplication() {
+    private void printExitMessage() {
         System.out.println("Exiting application...");
     }
 
