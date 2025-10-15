@@ -36,22 +36,20 @@ public final class ShoppingList
         List<String> catalogLines  = Files.readAllLines(catalogFilePath, StandardCharsets.UTF_8);
         String currentCategory = null;
 
-        for (int i = 0; i < catalogLines.size(); i++) {
-            String rawLine = catalogLines.get(i);
+        for (String rawLine : catalogLines) {
             String processedLine = rawLine.replace("\t", "    ");
-
             if (processedLine.trim().isEmpty()) continue;
 
             if (!Character.isWhitespace(processedLine.charAt(0))) {
                 if (!processedLine.endsWith(":")) {
-                    throw new IOException("Invalid category header at line " + (i + 1) + ": " + rawLine);
+	                throw new IOException("Invalid category header: " + rawLine);
                 }
                 currentCategory = processedLine.substring(0, processedLine.length() - 1).trim();
                 byCategory.putIfAbsent(currentCategory, new ArrayList<>());
             }
             else {
                 if (currentCategory == null) {
-                    throw new IOException("Item without category at line " + (i + 1) + ": " + rawLine);
+	                throw new IOException("Item without category: " + rawLine);
                 }
                 String item = processedLine.trim();
                 Product p = new Product(currentCategory, item);
@@ -84,7 +82,7 @@ public final class ShoppingList
     public void saveShoppingList() throws IOException {
         List<String> out = currentShoppingList.stream()
             .map(p -> p.getCategory() + "," + p.getItem())
-            .collect(Collectors.toList());
+            .toList();
         Files.write(shoppingListFilePath, out, StandardCharsets.UTF_8);
     }
 
