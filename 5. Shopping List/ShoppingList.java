@@ -59,25 +59,24 @@ public final class ShoppingList
         }
     }
 
-    public void loadShoppingListIfExists() throws IOException {
-        currentShoppingList.clear();
-        if (!Files.exists(shoppingListFilePath)) return;
+	public void loadShoppingListIfExists() throws IOException {
+		currentShoppingList.clear();
+		if (!Files.exists(shoppingListFilePath)) return;
 
-        List<String> shoppingListLines  = Files.readAllLines(shoppingListFilePath, StandardCharsets.UTF_8);
-        for (int i = 0; i < shoppingListLines .size(); i++) {
-            String currentLine = shoppingListLines .get(i).trim();
-            if (currentLine.isEmpty()) continue;
-            String[] productParts = currentLine.split(",", 2);
-            if (productParts.length != 2) {
-                throw new IOException("Invalid CSV at line " + (i + 1) + ": " + currentLine);
-            }
-            String category = productParts[0].trim();
-            String productName = productParts[1].trim();
+		Files.readAllLines(shoppingListFilePath, StandardCharsets.UTF_8)
+				.stream()
+				.filter(currentLine -> !currentLine.strip().isEmpty())
+				.forEach(currentLine -> {
+					String[] productParts = currentLine.split(",", 2);
+					if (productParts.length != 2) {
+						throw new RuntimeException("Invalid CSV line: " + currentLine);
+					}
+					String category = productParts[0].strip();
+					String productName = productParts[1].strip();
+					currentShoppingList.add(new Product(category, productName));
+				});
+	}
 
-            Product p = new Product(category, productName);
-            currentShoppingList.add(p);
-        }
-    }
 
     public void saveShoppingList() throws IOException {
         List<String> out = currentShoppingList.stream()
