@@ -9,7 +9,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public final class ShoppingList
 {
@@ -26,56 +25,58 @@ public final class ShoppingList
     }
 
     public void loadProductCatalog() throws IOException {
-        productCatalog.clear();
-        byCategory.clear();
-
         if (!Files.exists(catalogFilePath)) {
             throw new IOException("Catalog file not found: " + catalogFilePath);
         }
+        productCatalog.clear();
+        byCategory.clear();
 
-        List<String> catalogLines  = Files.readAllLines(catalogFilePath, StandardCharsets.UTF_8);
-        String currentCategory = null;
-
-        for (String rawLine : catalogLines) {
-            String processedLine = rawLine.replace("\t", "    ");
-            if (processedLine.trim().isEmpty()) continue;
-
-            if (!Character.isWhitespace(processedLine.charAt(0))) {
-                if (!processedLine.endsWith(":")) {
-	                throw new IOException("Invalid category header: " + rawLine);
-                }
-                currentCategory = processedLine.substring(0, processedLine.length() - 1).trim();
-                byCategory.putIfAbsent(currentCategory, new ArrayList<>());
-            }
-            else {
-                if (currentCategory == null) {
-	                throw new IOException("Item without category: " + rawLine);
-                }
-                String item = processedLine.trim();
-                Product p = new Product(currentCategory, item);
-                productCatalog.add(p);
-                byCategory.get(currentCategory).add(p);
-            }
-        }
+        Files.readAllLines(catalogFilePath, StandardCharsets.UTF_8)
+            .stream()
+            .filter(line -> !line.strip().isEmpty())
+            .forEach(line -> {
+                if (!Character.isWhitespace(line.charAt(0)))
+                    addCategoryFromLine(line);
+                else
+                    addProductFromLine(line);
+            });
     }
 
-	public void loadShoppingListIfExists() throws IOException {
-		currentShoppingList.clear();
-		if (!Files.exists(shoppingListFilePath)) return;
+    private void addCategoryFromLine(String line) {
+        if (!line.endsWith(":")) {
+            throw new RuntimeException("Invalid category header: " + line);
+        }
+        String category = line.substring(0, line.length() - 1).strip();
+        byCategory.putIfAbsent(category, new ArrayList<>());
+    }
 
-		Files.readAllLines(shoppingListFilePath, StandardCharsets.UTF_8)
-				.stream()
-				.filter(currentLine -> !currentLine.strip().isEmpty())
-				.forEach(currentLine -> {
-					String[] productParts = currentLine.split(",", 2);
-					if (productParts.length != 2) {
-						throw new RuntimeException("Invalid CSV line: " + currentLine);
-					}
-					String category = productParts[0].strip();
-					String productName = productParts[1].strip();
-					currentShoppingList.add(new Product(category, productName));
-				});
-	}
+    private void addProductFromLine(String line) {
+        if (byCategory.isEmpty()) {
+            throw new RuntimeException("Item without category: " + line);
+        }
+        String currentCategory = byCategory.keySet().iterator().next();
+        Product product = new Product(currentCategory, line.strip());
+        productCatalog.add(product);
+        byCategory.get(currentCategory).add(product);
+    }
+
+    public void loadShoppingListIfExists() throws IOException {
+        currentShoppingList.clear();
+        if (!Files.exists(shoppingListFilePath)) return;
+
+        Files.readAllLines(shoppingListFilePath, StandardCharsets.UTF_8)
+            .stream()
+            .filter(currentLine -> !currentLine.strip().isEmpty())
+            .forEach(currentLine -> {
+                String[] productParts = currentLine.split(",", 2);
+                if (productParts.length != 2) {
+                    throw new RuntimeException("Invalid CSV line: " + currentLine);
+                }
+                String category = productParts[0].strip();
+                String productName = productParts[1].strip();
+                currentShoppingList.add(new Product(category, productName));
+            });
+    }
 
 
     public void saveShoppingList() throws IOException {
