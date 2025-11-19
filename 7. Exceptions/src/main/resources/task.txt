@@ -1,0 +1,58 @@
+7) Exceptions
+
+Write a program that asks for vectors (mathematical sense) as input. The end of the vector is marked by the enter key. Ignore non-numeric elements. Try to add vectors if their lengths are equal.
+
+Example input:
+
+    A,5,8 - length is 2
+    1,9,10a,11 - length is 3
+    2,3,5,6,$% - length is 4
+
+If the vector lengths were not equal, throw a `DifferentVectorsLengthsException` (you'll need to create this exception)with which you can specify and later (after catching the exception) read the length of the vectors.
+If vectors were equal, the result of the addition is displayed.
+If the vectors were n't equal, you should be able to formulate each of the example sentences without changing your code nothing more than catch clause:
+
+    (first, second, ..., last) the vector length is ...
+    (first, second, ..., last) the vector length is (lower/bigger) than (first, second, ..., last) vector length. 
+
+The tutor will give the exact sentence to display during evaluation.
+Finally, If the vectors were not equal prompt the user to re-enter the vectors.
+
+Guidelines:
+
+    Propose a class and method structure where an exception is thrown in one class/method and caught in another class/method.
+    The catching class/method should not have access to any variables of the first class.
+    The given example sentences must be formulated solely based on the data read from the exception object. 
+
+
+
+
+
+JEDYNA POPRAWNA WERSJA, INNE NIE SA AKCEPTOWANE:
+
+public class DifferentVectorsLengthsException extends Exception 
+{
+    private final Vector[] vectors;
+
+    public Vector[] getVectors() 
+    {
+        return vectors;
+    }
+    
+    public DifferentVectorsLengthsException()
+    {
+        super();
+        vectors = null;
+    }
+
+    public DifferentVectorsLengthsException(String message, Vector []vectors) 
+    {
+        super(message);
+        this.vectors = vectors;
+    }
+}
+
+//
+Unit testy
+
+https://www.youtube.com/watch?v=vZm0lHciFsQ
